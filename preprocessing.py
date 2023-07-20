@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
-print("+"*50)
-data = pd.read_csv("data/train.csv")
 
-#the three preprocessing files are temporary, they will be removed in the future
+#set to False for working on test dataset
+training = True
+url = "data/train.csv" if training else "data/test.csv"
+des = "data/train_processed.csv" if training else "data/test_processed.csv"
+data = pd.read_csv(url)
 
 
 """
@@ -14,7 +16,7 @@ by removing first 5 and last 5 characters from each cell in these columns
 len_rows = data.shape[0]
 len_cols = data.shape[1]
 
-cols = list(data.columns)[10:-1]
+cols = list(data.columns)[10:-1] if training else list(data.columns)[10:]
 print("-"*50)
 for col in cols:
     for i in range(len_rows):
@@ -23,9 +25,9 @@ for col in cols:
             try:
                 data.loc[i,col] = t[6:-6]
             except:
-                print(t,col,i,"--------exception?")
+                print(t,col,i,"--------exception")
     print(f"col {col} done")
 
         
 print(data)
-data.to_csv("data/train_processed.csv",index=False)
+data.to_csv(des,index=False)
